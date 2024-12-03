@@ -9,11 +9,12 @@ YEAR=$(date +%Y)
 
 # obtain cookie
 if [ -z "$COOKIE" ]; then
-	echo "Please set the COOKIE environment variable to your Advent of Code cookie"
-	exit 1
+	echo "No COOKIE environment variable found, creating empty input file"
+	input=""
+else
+	# fetch input
+	input=$(curl -H "Cookie: session=$COOKIE" "https://adventofcode.com/${YEAR}/day/${DAY_NUM}/input")
 fi
-# fetch input
-input=$(curl -H "Cookie: session=$COOKIE" "https://adventofcode.com/${YEAR}/day/${DAY_NUM}/input")
 
 # Create the necessary files and directories
 DAY_FILE="src/days/day${DAY_NUM}.rs"
@@ -54,9 +55,12 @@ echo "$input" >"$INPUT_FILE"
 
 # Modify mod.rs
 if ! grep -q "pub mod day${DAY_NUM};" "$MOD_FILE"; then
+	# This is for MacOS because they use BSD-based sed which works differently from GNU sed, you'll see more of this down the file too
 	if [[ "$OSTYPE" == "darwin"* ]]; then
 		sed -i "" "1i\\
         pub mod day${DAY_NUM};" "$MOD_FILE"
+
+	# This is for GNU/Linux
 	elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 		sed -i "1i\\pub mod day${DAY_NUM};" "$MOD_FILE"
 	fi
@@ -68,6 +72,7 @@ if ! grep -q "${MATCH_CASE}" "$MAIN_FILE"; then
 	if [[ "$OSTYPE" == "darwin"* ]]; then
 		sed -i "" "/match day {/a \\
         ${MATCH_CASE}" "$MAIN_FILE"
+
 	elif [[ "$OSTYPE" == "linux-gnu" ]]; then
 		sed -i "/match day {/a\\${MATCH_CASE}" "$MAIN_FILE"
 	fi
