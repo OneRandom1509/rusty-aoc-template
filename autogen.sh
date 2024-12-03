@@ -13,7 +13,7 @@ if [ -z "$COOKIE" ]; then
 	exit 1
 fi
 # fetch input
-input=$(curl -H "Cookie: session=$COOKIE" https://adventofcode.com/2024/day/${DAY_NUM}/input)
+input=$(curl -H "Cookie: session=$COOKIE" "https://adventofcode.com/${YEAR}/day/${DAY_NUM}/input")
 
 # Create the necessary files and directories
 DAY_FILE="src/days/day${DAY_NUM}.rs"
