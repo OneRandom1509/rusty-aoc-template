@@ -21,34 +21,19 @@ DAY_FILE="src/days/day${DAY_NUM}.rs"
 INPUT_FILE="src/inputs/day${DAY_NUM}-input.txt"
 MOD_FILE="src/days/mod.rs"
 MAIN_FILE="src/main.rs"
+TEMPLATE_FILE="template.rs"
 
 # Create day file
 mkdir -p src/days
 mkdir -p src/inputs
 
-cat >"$DAY_FILE" <<EOF
-use crate::days::Day;
-use std::fs;
+# Create day file from template
+if [ ! -f "$TEMPLATE_FILE" ]; then
+	echo "Error: Template file '$TEMPLATE_FILE' not found."
+	exit 1
+fi
 
-static DAY_NUM: i32 = ${DAY_NUM};
-
-#[allow(non_camel_case_types)]
-pub struct day${DAY_NUM};
-
-impl Day for day${DAY_NUM} {
-    fn part1(&self) {
-        let file_path = format!("src/inputs/day{}-input.txt", DAY_NUM);
-        let contents = fs::read_to_string(file_path).unwrap();
-
-    }
-
-    fn part2(&self) {
-        let file_path = format!("src/inputs/day{}-input.txt", DAY_NUM);
-        let contents = fs::read_to_string(file_path).unwrap();
-
-    }
-}
-EOF
+sed "s/{{PLACEHOLDER}}/${DAY_NUM}/g" "$TEMPLATE_FILE" >"$DAY_FILE"
 
 # Create input file
 echo "$input" >"$INPUT_FILE"
