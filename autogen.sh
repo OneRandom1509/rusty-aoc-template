@@ -3,6 +3,18 @@
 # Prompt the user for the day number
 read -p "Enter the day number for Advent of Code: " DAY_NUM
 
+# get current year
+# todo: let user set year
+YEAR=$(date +%Y)
+
+# obtain cookie
+if [ -z "$COOKIE" ]; then
+	echo "Please set the COOKIE environment variable to your Advent of Code cookie"
+	exit 1
+fi
+# fetch input
+input=$(curl -H "Cookie: session=$COOKIE" https://adventofcode.com/2024/day/${DAY_NUM}/input)
+
 # Create the necessary files and directories
 DAY_FILE="src/days/day${DAY_NUM}.rs"
 INPUT_FILE="src/inputs/day${DAY_NUM}-input.txt"
@@ -38,17 +50,19 @@ impl Day for day${DAY_NUM} {
 EOF
 
 # Create input file
-touch "$INPUT_FILE"
+echo "$input" >"$INPUT_FILE"
 
 # Modify mod.rs
 if ! grep -q "pub mod day${DAY_NUM};" "$MOD_FILE"; then
-	sed -i "1i\\pub mod day${DAY_NUM};" "$MOD_FILE"
+	sed -i "" "1i\\
+        pub mod day${DAY_NUM};" "$MOD_FILE"
 fi
 
 # Modify main.rs
 MATCH_CASE="            ${DAY_NUM} => day${DAY_NUM}::day${DAY_NUM}.run(part),"
 if ! grep -q "${MATCH_CASE}" "$MAIN_FILE"; then
-	sed -i "/match day {/a \\${MATCH_CASE}" "$MAIN_FILE"
+	sed -i "" "/match day {/a \\
+        ${MATCH_CASE}" "$MAIN_FILE"
 fi
 
 # Run rustfmt on the changed files
