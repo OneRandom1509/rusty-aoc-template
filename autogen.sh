@@ -54,15 +54,23 @@ echo "$input" >"$INPUT_FILE"
 
 # Modify mod.rs
 if ! grep -q "pub mod day${DAY_NUM};" "$MOD_FILE"; then
-	sed -i "" "1i\\
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		sed -i "" "1i\\
         pub mod day${DAY_NUM};" "$MOD_FILE"
+	elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+		sed -i "1i\\pub mod day${DAY_NUM};" "$MOD_FILE"
+	fi
 fi
 
 # Modify main.rs
 MATCH_CASE="            ${DAY_NUM} => day${DAY_NUM}::day${DAY_NUM}.run(part),"
 if ! grep -q "${MATCH_CASE}" "$MAIN_FILE"; then
-	sed -i "" "/match day {/a \\
+	if [[ "$OSTYPE" == "darwin"* ]]; then
+		sed -i "" "/match day {/a \\
         ${MATCH_CASE}" "$MAIN_FILE"
+	elif [[ "$OSTYPE" == "linux-gnu" ]]; then
+		sed -i "/match day {/a\\${MATCH_CASE}" "$MAIN_FILE"
+	fi
 fi
 
 # Run rustfmt on the changed files
