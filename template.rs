@@ -1,10 +1,9 @@
-use crate::days::Day;
+use crate::days::Challenge;
 use std::fs;
 
-#[allow(non_camel_case_types)]
-pub struct day{{PLACEHOLDER}};
+pub struct Day{{PLACEHOLDER}};
 
-impl Day for day{{PLACEHOLDER}} {
+impl Challenge for Day{{PLACEHOLDER}} {
     fn part1(&self) {
         let file_path = "src/inputs/day{{PLACEHOLDER}}-input.txt";
         let contents = fs::read_to_string(file_path).unwrap();

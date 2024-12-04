@@ -1,4 +1,4 @@
-# Rusty AOC Template
+# Rusty AoC Template
 
 Be lazy.
 

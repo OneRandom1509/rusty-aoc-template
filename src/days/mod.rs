@@ -1,4 +1,4 @@
-pub trait Day {
+pub trait Challenge {
     fn part1(&self);
     fn part2(&self);
     fn run(&self, part: i32) {

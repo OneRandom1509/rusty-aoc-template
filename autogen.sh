@@ -52,7 +52,7 @@ if ! grep -q "pub mod day${DAY_NUM};" "$MOD_FILE"; then
 fi
 
 # Modify main.rs
-MATCH_CASE="            ${DAY_NUM} => day${DAY_NUM}::day${DAY_NUM}.run(part),"
+MATCH_CASE="            ${DAY_NUM} => day${DAY_NUM}::Day${DAY_NUM}.run(part),"
 if ! grep -q "${MATCH_CASE}" "$MAIN_FILE"; then
 	if [[ "$OSTYPE" == "darwin"* ]]; then
 		sed -i "" "/match day {/a \\
@@ -66,4 +66,4 @@ fi
 # Run rustfmt on the changed files
 rustfmt "$DAY_FILE" "$MOD_FILE" "$MAIN_FILE"
 
-echo "Setup for day ${DAY_NUM} is complete, Happy Coding!"
+echo "Setup for day ${DAY_NUM} is complete! Hop on to src/days/day${DAY_NUM}.rs... Happy Coding!"
